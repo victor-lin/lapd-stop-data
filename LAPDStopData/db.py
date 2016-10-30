@@ -1,4 +1,7 @@
-from pandas import read_csv, DataFrame
+from pandas import read_csv, to_datetime
+from pandas.tslib import Timestamp
+from numpy import int64, float64
+
 from collections import OrderedDict
 from cx_Oracle import connect, makedsn
 from contextlib import closing
@@ -6,6 +9,8 @@ from . import app
 
 
 log = app.logger
+
+INSERT_STR = 'INSERT INTO {} VALUES ({})'
 
 
 def connect_db():
@@ -28,20 +33,28 @@ def init_db():
                 cur.execute(schema_string.format(app.config['UNAME'],
                                                  f.read()))
             df_raw = read_csv(app.config['DATA'])
-            # TODO: fix data types in df_raw
-
-            # for statement in get_insert_statements_stop(df_raw):
-            #     cur.execute(statement)
+            df_raw['STOP_DATE'] = to_datetime(df_raw.STOP_DT + df_raw.STOP_TM,
+                                              format='%m/%d/%Y%H:%M')
+            for statement in get_insert_statements_stop(df_raw):
+                cur.execute(statement)
         con.commit()
+
+
+def convert_val(val):
+    if type(val) is Timestamp:
+        date = val.strftime('%m/%d/%Y %I:%M')
+        return "TO_DATE('{}', 'mm/dd/yyyy hh:mi')".format(date)
+    if type(val) is float64:
+        return str(int(val))
+    if type(val) is int64:
+        return str(val)
+    return "'{}'".format(val)
 
 
 def get_insert_statements_stop(df_raw):
     """Return insert statement strings for PoliceStop table"""
-
-    # TODO: concat `STOP_DT` and `STOP_TM` -> `STOP_DATE`
-
     stop_dict = OrderedDict([('STOP_ID', 'FORM_REF_NBR'),
-                             # ('STOP_DATE', 'STOP_DATE'),
+                             ('STOP_DATE', 'STOP_DATE'),
                              ('STOP_TYPE', 'STOP_TYPE'),
                              ('POST_STOP_ACTIVITY', 'POST_STOP_ACTV_IND'),
                              ('OFFICER1_ID', 'OFCR1_SERL_NBR'),
@@ -49,7 +62,8 @@ def get_insert_statements_stop(df_raw):
     df_stop = df_raw.groupby('FORM_REF_NBR').first().reset_index()[stop_dict.values()]
     df_stop.columns = stop_dict.keys()
     for i, row in df_stop.iterrows():
-        yield 'INSERT INTO PoliceStop VALUES ({})'.format(','.join([str(v) for v in row]))
+        row_vals = [convert_val(val) for val in row]
+        yield INSERT_STR.format('PoliceStop', ','.join(row_vals))
 
 
 def get_insert_statements_officer(df_raw):

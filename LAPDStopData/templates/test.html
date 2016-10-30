@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>test page</h1>
+<div>
+  <h3>some testing stuff:</h3>
+  <button type="button" class="btn btn-default" name="run-ddl" onclick="initDB()">create schema</button>
+  <button type="button" class="btn btn-default" name="run-ddl" onclick="dropTables()">drop tables</button>
+</div>
+<div>
+  <h3>some (all) tables:</h3>
+  <ol>
+  {% for row in results %}
+    <li>{{ row[0] }}</li>
+  {% endfor %}
+  </ol>
+</div>
+{% endblock %}

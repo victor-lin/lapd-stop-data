@@ -1,7 +1,7 @@
 CREATE TABLE Officer (
-    officer_id NUMBER(5) NOT NULL,
-    div_number NUMBER(2),
-    div_name   VARCHAR2(50),
+    officer_id  NUMBER(5) NOT NULL,
+    div_id      VARCHAR(2),
+    div_name    VARCHAR2(50),
     PRIMARY KEY (officer_id)
 )
 

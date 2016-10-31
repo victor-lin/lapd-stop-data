@@ -1,8 +1,7 @@
 from contextlib import closing
 
 from flask import render_template
-from . import app
-from .db import connect_db, init_db, drop_tables
+from . import app, db
 
 
 log = app.logger
@@ -15,7 +14,7 @@ def start():
 
 @app.route('/test')
 def test():
-    with connect_db() as con:
+    with db.connect_db() as con:
         log.info('connected')
         with closing(con.cursor()) as cur:
             log.info('querying stuff')
@@ -29,13 +28,19 @@ def get_query():
     pass
 
 
-@app.route('/_initdb/', methods=['POST'])
-def load_db():
-    init_db()
-    return "initialized database"
+@app.route('/_create_schema/', methods=['POST'])
+def create_schema_view():
+    db.create_schema()
+    return ""
 
 
-@app.route('/_droptables/', methods=['POST'])
-def teardown():
-    drop_tables()
-    return "dropped tables"
+@app.route('/_populate/<table_name>/', methods=['POST'])
+def populate_view(table_name):
+    db.populate(table_name)
+    return ""
+
+
+@app.route('/_drop_tables/', methods=['POST'])
+def drop_tables_view():
+    db.drop_tables()
+    return ""

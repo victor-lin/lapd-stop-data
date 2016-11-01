@@ -10,6 +10,10 @@ $(document).on('click', '#createSchema:enabled', function(){
     sendRequest('/_create_schema/');
 });
 
+$(document).on('click', '#addConstraints:enabled', function(){
+    sendRequest('/_add_constraints/');
+});
+
 $(document).on('click', '#insertOfficers:enabled', function(){
     sendRequest("/_populate/Officer/");
 });

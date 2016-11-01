@@ -64,6 +64,22 @@ def populate(table):
         con.commit()
 
 
+def add_constraints():
+    """Add PK and FK constraints"""
+    with connect_db() as con:
+        cur = con.cursor()
+        with app.open_resource('constraints.sql') as f:
+            log.info('Creating database schema')
+            statements = f.read().split(';')[:-1]
+            for statement in statements:
+                log.debug('Executing: "%s"', statement)
+                try:
+                    cur.execute(statement)
+                except DatabaseError as db_error:
+                    log.error(db_error)
+        con.commit()
+
+
 def convert_val(val):
     """Return Oracle-friendly string based on data type"""
     if type(val) is Timestamp:

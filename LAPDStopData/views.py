@@ -34,6 +34,12 @@ def create_schema_view():
     return ""
 
 
+@app.route('/_add_constraints/', methods=['POST'])
+def add_constraints_view():
+    db.add_constraints()
+    return ""
+
+
 @app.route('/_populate/<table_name>/', methods=['POST'])
 def populate_view(table_name):
     db.populate(table_name)

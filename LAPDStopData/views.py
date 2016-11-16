@@ -18,7 +18,7 @@ def test():
         log.info('connected')
         with closing(con.cursor()) as cur:
             log.info('querying stuff')
-            cur.execute('SELECT table_name FROM user_tables')
+            cur.execute('SELECT * FROM officer')
             results = cur.fetchall()
     return render_template('test.html', results=results)
 

@@ -11,11 +11,15 @@
   <button id="dropTables" type="button" class="btn btn-default">drop tables</button>
 </div>
 <div>
-  <h3>some (all) tables:</h3>
+  <h3>some tables:</h3>
   <ol>
-  {% for row in results %}
-    <li>{{ row[0] }}</li>
-  {% endfor %}
+    {% for row in results %}
+    <li>
+    {% for data in row %}
+    {{ data }}
+    {% endfor %}
+    </li>
+    {% endfor %}
   </ol>
 </div>
 {% endblock %}

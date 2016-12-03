@@ -7,6 +7,18 @@ from . import app, db
 log = app.logger
 
 
+def get_area_arrests():
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT o.div_name, COUNT(ps.stop_id)
+                           FROM officer o
+                           JOIN policestop ps
+                             ON o.officer_id = ps.officer1_id
+                       GROUP BY o.div_name""")
+        results = cur.fetchall()
+        return {div_name: count for div_name, count in results}
+
+
 @app.route('/')
 def start():
     return render_template('start.html')

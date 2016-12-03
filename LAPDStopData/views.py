@@ -22,16 +22,16 @@ def test():
     return render_template('test.html', results=results)
 
 @app.route('/filter_data')
-def test():
+def filter_data():
     return render_template('filter_data.html')
 
 @app.route('/figures')
-def get_query():
-    pass
+def figures():
+    return render_template('figures.html')
 
 @app.route('/results')
-def get_query():
-    pass
+def results():
+    return render_template('results.html')
 
 @app.route('/_create_schema/', methods=['POST'])
 def create_schema_view():

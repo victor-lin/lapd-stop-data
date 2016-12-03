@@ -11,7 +11,6 @@ log = app.logger
 def start():
     return render_template('start.html')
 
-
 @app.route('/test')
 def test():
     with db.connect_db() as con:
@@ -22,11 +21,17 @@ def test():
             results = cur.fetchall()
     return render_template('test.html', results=results)
 
+@app.route('/filter_data')
+def test():
+    return render_template('filter_data.html')
 
-@app.route('/query')
+@app.route('/figures')
 def get_query():
     pass
 
+@app.route('/results')
+def get_query():
+    pass
 
 @app.route('/_create_schema/', methods=['POST'])
 def create_schema_view():

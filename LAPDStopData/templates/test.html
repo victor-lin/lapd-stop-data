@@ -12,14 +12,30 @@
 </div>
 <div>
   <h3>some tables:</h3>
-  <ol>
-    {% for row in results %}
-    <li>
-    {% for data in row %}
-    {{ data }}
-    {% endfor %}
-    </li>
-    {% endfor %}
-  </ol>
+  <table class="table">
+    <thead>
+      <tr>
+	{% for row in table_head %}
+  	{% for data in row %}
+	<th>
+  	  {{ data }}
+	</th>
+  	{% endfor %}
+	{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in table_data %}
+      <tr>
+  	{% for data in row %}
+	<td>
+  	  {{data}}
+	</td>
+  	  {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
 </div>
 {% endblock %}

@@ -23,6 +23,7 @@ def get_area_arrests():
 def start():
     return render_template('start.html')
 
+
 @app.route('/test')
 def test():
     with db.connect_db() as con:
@@ -33,17 +34,23 @@ def test():
             results = cur.fetchall()
     return render_template('test.html', results=results)
 
+
 @app.route('/filter_data')
 def filter_data():
     return render_template('filter_data.html')
 
+
 @app.route('/figures')
 def figures():
-    return render_template('figures.html')
+    div_count_data = get_area_arrests()
+    return render_template('figures.html',
+                           div_count_data=div_count_data)
+
 
 @app.route('/results')
 def results():
     return render_template('results.html')
+
 
 @app.route('/_create_schema/', methods=['POST'])
 def create_schema_view():

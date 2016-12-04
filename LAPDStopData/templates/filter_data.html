@@ -2,6 +2,29 @@
 {% block body %}
 <h1>Filter Data</h1>
 <div>
-  
+  <table class="table">
+    <thead>
+      <tr>
+	{% for row in table_head %}
+  	{% for data in row %}
+	<th>
+  	  {{ data }}
+	</th>
+  	{% endfor %}
+	{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in table_data %}
+      <tr>
+  	{% for data in row %}
+	<td>
+  	  {{data}}
+	</td>
+  	  {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}

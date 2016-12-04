@@ -29,13 +29,23 @@ def test():
         log.info('connected')
         with closing(con.cursor()) as cur:
             log.info('querying stuff')
-            cur.execute('SELECT * FROM officer')
-            results = cur.fetchall()
-    return render_template('test.html', results=results)
+            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFICER\'')
+            table_head = cur.fetchall()
+            cur.execute('SELECT * FROM OFFICER')
+            table_data = cur.fetchall()
+    return render_template('test.html', table_head=table_head[::-1], table_data=table_data)
 
 @app.route('/filter_data')
 def filter_data():
-    return render_template('filter_data.html')
+    with db.connect_db() as con:
+        log.info('connected')
+        with closing(con.cursor()) as cur:
+            log.info('querying stuff')
+            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFICER\'')
+            table_head = cur.fetchall()
+            cur.execute('SELECT * FROM OFFICER')
+            table_data = cur.fetchall()
+    return render_template('filter_data.html', table_head=table_head[::-1], table_data=table_data)
 
 @app.route('/figures')
 def figures():

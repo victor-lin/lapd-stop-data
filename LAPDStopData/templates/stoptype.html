@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body %}
+        <h1>Reasons for police stops</h1>
+    <!-- bar chart canvas element -->
+
+        <canvas id="stop-reasons-chart" width="600" height="400"></canvas>
+<script>
+   // bar chart data
+   var barData = {
+
+   labels : [{% for type in stop_type_data.keys() %}
+                  "{{type}}",
+              {% endfor %}],
+   datasets : [
+      {
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+         data : [{% for count in stop_type_data.values() %}
+                      {{count}},
+                    {% endfor %}]
+      }
+      ]
+   }
+ 
+   // get bar chart canvas
+   var mychart = document.getElementById("stop-reasons-chart").getContext("2d");
+ 
+   steps = 10
+   max = 500000
+   // draw bar chart
+   new Chart(mychart).Bar(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true
+   });
+ 
+</script>
+{% endblock %}

@@ -18,6 +18,16 @@ def get_area_arrests():
         results = cur.fetchall()
         return {div_name: count for div_name, count in results}
 
+def get_stop_type_info():
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT stop_type, COUNT(stop_type) AS counts 
+                           FROM policestop 
+                       GROUP BY stop_type 
+                       ORDER BY counts DESC""")
+        results = cur.fetchall()
+        return {stop_type: count for stop_type, count in results}
+
 
 @app.route('/')
 def start():
@@ -55,6 +65,11 @@ def figures():
     div_count_data = get_area_arrests()
     return render_template('figures.html',
                            div_count_data=div_count_data)
+
+@app.route('/stop_type_bar_chart')
+def stop_type_bar_chart():
+    stop_type_data = get_stop_type_info()
+    return render_template('stoptype.html',stop_type_data= stop_type_data)
 
 
 @app.route('/results')

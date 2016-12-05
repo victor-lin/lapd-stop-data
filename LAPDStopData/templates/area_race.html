@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block body %}
+<div>
+  <h3>Distribution of race amongst areas</h3>
+  <canvas id="area-race-chart" width="600" height="400"></canvas>
+  <script>
+    var barOptions_stacked = {
+        tooltips: {
+            enabled: true
+        },
+        scales: {
+            xAxes: [{
+                stacked: true
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: false,
+                    color: "#fff",
+                    zeroLineColor: "#fff",
+                    zeroLineWidth: 0
+                },
+                stacked: true
+            }]
+        },
+        legend: {
+            display: true,
+        },
+    };
+    var colors = generateColors({{ num_ethnicities }});
+    var div_count_data = {
+        type: 'horizontalBar',
+        data: {
+            labels: [
+                {% for division in divisions %}
+                    "{{ division }}",
+                {% endfor %}
+            ],
+            datasets: [
+                {% for i, ethnicity in ethnicities %}
+                    {
+                        label: "{{ ethnicity }}",
+                        data: [
+                            {% for division in divisions %}
+                                {{ area_race_data[ethnicity][division] }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: colors[{{ i }}],
+                    },
+                {% endfor %}
+            ],
+        },
+        options: barOptions_stacked,
+    }
+    var area_race_canvas = document.getElementById("area-race-chart").getContext("2d");
+    div_count_chart = new Chart(area_race_canvas, div_count_data);
+  </script>
+</div>
+{% endblock %}

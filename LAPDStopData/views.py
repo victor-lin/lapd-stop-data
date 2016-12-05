@@ -8,15 +8,20 @@ log = app.logger
 
 
 def get_area_arrests():
+    """
+    Return
+    ------
+    { division name : stop count }
+    """
     with db.connect_db() as con:
         cur = con.cursor()
-        cur.execute("""  SELECT o.div_name, COUNT(ps.stop_id)
+        cur.execute("""  SELECT o.div_name, COUNT(*)
                            FROM officer o
                            JOIN policestop ps
                              ON o.officer_id = ps.officer1_id
                        GROUP BY o.div_name""")
         results = cur.fetchall()
-        return {div_name: count for div_name, count in results}
+        return dict(results)
 
 def get_stop_type_info():
     with db.connect_db() as con:
@@ -27,6 +32,39 @@ def get_stop_type_info():
                        ORDER BY counts DESC""")
         results = cur.fetchall()
         return {stop_type: count for stop_type, count in results}
+
+
+def get_area_race_data():
+    """
+    Return
+    ------
+    {
+        ethnicity: { division name : count }
+    }
+    """
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT ofcr.div_name,
+                                o.ethnicity,
+                                COUNT(*) AS n
+                           FROM Offender o
+                           JOIN PoliceStop ps
+                                ON ps.stop_id = o.stop_id
+                           JOIN Officer ofcr
+                                ON ofcr.officer_id = ps.officer1_id
+                       GROUP BY o.ethnicity, ofcr.div_name""")
+        results = cur.fetchall()
+        cur.execute("""SELECT DISTINCT ethnicity
+                         FROM Offender""")
+        ethnicities = [x[0] for x in cur.fetchall()]
+    div_counts = get_area_arrests()
+    divisions = sorted(div_counts.keys(),
+                       key=lambda x: div_counts[x],
+                       reverse=True)
+    data = {ethnicity: dict() for ethnicity in ethnicities}
+    for division, ethnicity, count in results:
+            data[ethnicity][division] = count
+    return divisions, ethnicities, data
 
 
 @app.route('/')
@@ -72,9 +110,38 @@ def stop_type_bar_chart():
     return render_template('stoptype.html',stop_type_data= stop_type_data)
 
 
+@app.route('/area_race')
+def area_race():
+    divisions, ethnicities, area_race_data = get_area_race_data()
+    return render_template('area_race.html',
+                           area_race_data=area_race_data,
+                           divisions=divisions,
+                           ethnicities=enumerate(ethnicities),
+                           num_ethnicities=len(ethnicities))
+
+
 @app.route('/results')
 def results():
     return render_template('results.html')
+
+
+@app.route('/_get_tuple_count', methods=['POST'])
+def get_tuple_count():
+    """
+    Return
+    ------
+    { table name : tuple count }
+    """
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT table_name, num_rows
+                           FROM user_tables
+                          WHERE (table_name = 'OFFICER' OR
+                                 table_name = 'OFFENDER' OR
+                                 table_name = 'POLICESTOP')
+                       ORDER BY num_rows DESC""")
+        results = cur.fetchall()
+    return dict(results)
 
 
 @app.route('/_create_schema/', methods=['POST'])

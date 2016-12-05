@@ -2,7 +2,7 @@
 {% block body %}
 <div>
   <h3>Distribution of race amongst areas</h3>
-  <canvas id="area-race-chart" width="600" height="400"></canvas>
+  <canvas id="area-race-chart"></canvas>
   <script>
     var barOptions_stacked = {
         tooltips: {
@@ -27,7 +27,7 @@
         },
     };
     var colors = generateColors({{ num_ethnicities }});
-    var div_count_data = {
+    var area_race_data = {
         type: 'horizontalBar',
         data: {
             labels: [
@@ -52,7 +52,7 @@
         options: barOptions_stacked,
     }
     var area_race_canvas = document.getElementById("area-race-chart").getContext("2d");
-    div_count_chart = new Chart(area_race_canvas, div_count_data);
+    div_count_chart = new Chart(area_race_canvas, area_race_data);
   </script>
 </div>
 {% endblock %}

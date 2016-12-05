@@ -61,10 +61,15 @@ def get_area_race_data():
     divisions = sorted(div_counts.keys(),
                        key=lambda x: div_counts[x],
                        reverse=True)
-    data = {ethnicity: dict() for ethnicity in ethnicities}
+    # use top 26 divisions, aggregate the rest in 'other'
+    top_divisions = divisions[:26]
+    data = {ethnicity: {'other': 0} for ethnicity in ethnicities}
     for division, ethnicity, count in results:
+        if division in top_divisions:
             data[ethnicity][division] = count
-    return divisions, ethnicities, data
+        else:
+            data[ethnicity]['other'] += count
+    return top_divisions + ['other'], ethnicities, data
 
 
 @app.route('/')
@@ -101,8 +106,16 @@ def filter_data():
 @app.route('/figures')
 def figures():
     div_count_data = get_area_arrests()
+    divisions, ethnicities, area_race_data = get_area_race_data()
     return render_template('figures.html',
-                           div_count_data=div_count_data)
+                           # 1
+                           div_count_data=div_count_data,
+                           # 2
+                           area_race_data=area_race_data,
+                           divisions=divisions,
+                           ethnicities=enumerate(ethnicities),
+                           num_ethnicities=len(ethnicities),
+                           num_divisions=len(divisions))
 
 @app.route('/stop_type_bar_chart')
 def stop_type_bar_chart():

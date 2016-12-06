@@ -1,14 +1,5 @@
 <canvas id="ethnicity-counts-chart"></canvas>
 <script>
-var pie_options = {
-    tooltips: {
-        enabled: true
-    },
-    legend: {
-        display: true,
-    },
-};
-
 var ethnicity_colors = generateColors({{ num_ethnicities }});
 var ethnicity_count_data = {
     type: 'pie',

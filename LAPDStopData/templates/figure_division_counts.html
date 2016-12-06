@@ -1,16 +1,6 @@
 <canvas id="division-counts-chart"></canvas>
 <script>
-var pie_options = {
-    tooltips: {
-        enabled: true
-    },
-    legend: {
-        display: true,
-    },
-};
-
 var division_colors = generateColors({{ num_divisions }});
-
 var div_count_data = {
     type: 'pie',
     data: {

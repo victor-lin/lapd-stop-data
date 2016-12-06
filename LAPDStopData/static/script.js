@@ -116,3 +116,28 @@ function generateColors(num_colors) {
     }
     return colors;
 }
+
+// chart.js stuff
+
+var pie_options = {
+    tooltips: {
+        enabled: true,
+        callbacks: {
+            label: function(tooltipItem, data) {
+                var allData = data.datasets[tooltipItem.datasetIndex].data;
+                var tooltipLabel = data.labels[tooltipItem.index];
+                var tooltipData = allData[tooltipItem.index];
+                var total = 0;
+                for (var i in allData) {
+                    total += allData[i];
+                }
+                var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+            }
+        },
+    },
+    legend: {
+        display: true,
+    },
+};
+

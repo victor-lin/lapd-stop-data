@@ -1,0 +1,19 @@
+<canvas id="division-counts-chart"></canvas>
+<script>
+month_counts = {{ month_counts_json | safe }};
+var month_counts_canvas = document.getElementById('division-counts-chart').getContext('2d');
+var month_counts_data = {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+            data: Object.keys(month_counts).map(
+                function(key) {
+                    return month_counts[key];
+                }
+            ),
+        }],
+    },
+}
+month_counts_chart = new Chart(month_counts_canvas, month_counts_data);
+</script>

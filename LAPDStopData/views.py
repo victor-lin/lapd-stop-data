@@ -1,13 +1,31 @@
+import json
+
 from contextlib import closing
 from collections import OrderedDict
 
 from flask import render_template, request
 from . import app, db
 
-
 log = app.logger
 
 counter = 0
+
+
+def get_monthly_counts():
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT month, AVG(n)
+                           FROM
+                                (  SELECT extract(day FROM stop_date) AS day,
+                                          extract(month FROM stop_date) AS month,
+                                          COUNT(*) AS n
+                                     FROM policestop
+                                 GROUP BY extract(day FROM stop_date),
+                                          extract(month FROM stop_date))
+                       GROUP BY month""")
+        results = cur.fetchall()
+    return OrderedDict(results)
+
 
 def get_ethnicity_distribution():
     """
@@ -253,6 +271,8 @@ def figures_other():
     stop_type_data = get_stop_type_info()
     # 2
     divisions, ethnicities, area_race_data = get_area_race_data()
+    # 3
+    month_counts = get_monthly_counts()
     return render_template('other.html',
                            # 1
                            stop_type_data=stop_type_data,
@@ -261,7 +281,9 @@ def figures_other():
                            divisions=divisions,
                            ethnicities=enumerate(ethnicities),
                            num_ethnicities=len(ethnicities),
-                           num_divisions=len(divisions))
+                           num_divisions=len(divisions),
+                           # 3
+                           month_counts_json=json.dumps(month_counts))
 
 
 @app.route('/results')

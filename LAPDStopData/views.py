@@ -91,15 +91,19 @@ def test():
             table_data = cur.fetchall()
     return render_template('test.html', table_head=table_head[::-1], table_data=table_data)
 
-@app.route('/filter_data/officer', methods=['GET', 'POST'])
+@app.route('/filter_data/officer')
 def filter_officer():
     sql_query = 'SELECT * FROM OFFICER'
     constraints = ''
-    if request.method == 'POST':
-        sql_query += ' WHERE '
-        sql_query += 'DIV_NAME = \''
-        sql_query += request.form.get('Region', '')
-        sql_query += '\' '
+    selected_regions = request.args.getlist('Region')
+    if selected_regions:
+        if selected_regions[0] != 'All':
+            sql_query += ' WHERE '
+            for reg in selected_regions:
+                sql_query += 'DIV_NAME = \''
+                sql_query += reg
+                sql_query += '\' OR '
+            sql_query = sql_query[:-4]
     with db.connect_db() as con:
         log.info('connected')
         with closing(con.cursor()) as cur:
@@ -113,29 +117,34 @@ def filter_officer():
     return render_template('officer.html', table_head=table_head[::-1],
                            table_data=table_data, regions=regions)
 
-@app.route('/filter_data/offender', methods=['GET', 'POST'])
+@app.route('/filter_data/offender')
 def filter_offender():
     sql_query = 'SELECT * FROM OFFENDER'
-    if request.method == 'POST':
-        if (request.form.get('Gender') != 'All' and request.form.get('Ethnicity') != 'ALL'):
+    selected_gender = request.args.get('Gender')
+    selected_ethnicity = request.args.getlist('Ethnicity')
+    if selected_gender and selected_ethnicity:
+        if (selected_gender != 'All' and selected_ethnicity[0] != 'ALL'):
             sql_query += ' WHERE '
             sql_query += 'GENDER = \''
-            sql_query += request.form.get('Gender', '')
+            sql_query += selected_gender
             sql_query += '\' AND '
-            sql_query += 'ETHNICITY = \''
-            sql_query += request.form.get('Ethnicity', '')
-            sql_query += '\' '
-        elif (request.form.get('Gender') != 'All' and request.form.get('Ethnicity') == 'ALL'):
+            for eth in selected_ethnicity:
+                sql_query += 'ETHNICITY = \''
+                sql_query += eth
+                sql_query += '\' AND'
+            sql_query = sql_query[:-4]
+        elif (selected_gender != 'All' and selected_ethnicity[0] == 'ALL'):
             sql_query += ' WHERE '
             sql_query += 'GENDER = \''
-            sql_query += request.form.get('Gender', '')
+            sql_query += selected_gender
             sql_query += '\' '
-        elif (request.form.get('Gender') == 'All' and request.form.get('Ethnicity') != 'ALL'):
-            sql_query += ' WHERE '
-            sql_query += 'ETHNICITY = \''
-            sql_query += request.form.get('Ethnicity', '')
-            sql_query += '\' '
-            
+        elif (selected_gender == 'All' and selected_ethnicity[0] != 'ALL'):
+            for eth in selected_ethnicity:
+                sql_query += ' WHERE '
+                sql_query += 'ETHNICITY = \''
+                sql_query += eth
+                sql_query += '\' AND '
+            sql_query = sql_query[:-4]
     with db.connect_db() as con:
         log.info('connected')
         with closing(con.cursor()) as cur:
@@ -147,20 +156,24 @@ def filter_offender():
     return render_template('offenders.html', table_head=table_head[::-1],
                            table_data=table_data)
 
-@app.route('/filter_data/police_stops', methods=['GET', 'POST'])
+@app.route('/filter_data/police_stops')
 def filter_police_stops():
     sql_query = 'SELECT * FROM POLICESTOP'
-    if request.method == 'POST':
+    begin_month = request.args.get('begin-month')
+    end_month = request.args.get('end-month')
+    selected_type = request.args.get('Type')
+    if begin_month and end_month and selected_type:
         sql_query += ' WHERE '
         sql_query += 'STOP_DATE BETWEEN TO_DATE(\''
-        sql_query += request.form.get('begin-month')
+        sql_query += begin_month
         sql_query += '\', \'YYYY-MON-DD\') AND TO_DATE(\''
-        sql_query += request.form.get('end-month')
+        sql_query += end_month
         sql_query += '\', \'YYYY-MON-DD\') + 1 - (1/(24*60*60))'
-        if(request.form.get('Type') != 'All'):
+        if(selected_type != 'All'):
             sql_query += 'AND STOP_TYPE = \''
-            sql_query += request.form.get('Type', '')
+            sql_query += selected_type
             sql_query += '\''
+    log.info(sql_query)
         
     with db.connect_db() as con:
         log.info('connected')

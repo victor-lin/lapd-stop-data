@@ -2,7 +2,7 @@
 
 {% block filters %}
 <div>
-  <form action="/filter_data/offender" method="post">
+  <form action="/filter_data/offender">
     Gender:
     <select name="Gender">
       <option value="All">All</option>
@@ -13,8 +13,8 @@
     <br>
 
     Ethnicity:
-    <select name="Ethnicity">
-      <option value="ALL">All</option>
+    <select name="Ethnicity" multiple="true">
+      <option selected="true" value="ALL">All</option>
       <option value="ASIAN">Asian</option>
       <option value="BLACK">Black</option>
       <option value="HISPANIC">Hispanic</option>

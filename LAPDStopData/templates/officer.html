@@ -2,9 +2,10 @@
 
 {% block filters %}
 <div>
-  <form action="/filter_data/officer" method="post">
+  <form action="/filter_data/officer">
     Region:
-    <select id="region" name="Region">
+    <select id="region" name="Region" multiple="true">
+      <option value="All">All</option>
       {% for r in regions %}
       {% for data in r %}
       <option value="{{data}}">{{data}}</option>

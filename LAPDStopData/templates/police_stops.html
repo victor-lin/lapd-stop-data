@@ -2,7 +2,7 @@
 
 {% block filters %}
 <div>
-  <form action="/filter_data/police_stops" method="post">
+  <form action="/filter_data/police_stops">
      From: 
     <select name="begin-month">
       <option selected="true" value="2015-JAN-01">January</option>
@@ -39,7 +39,7 @@
     
     Type:
     <select name="Type">
-      <option value="All">All</option>
+      <option selected="true" value="All">All</option>
       <option value="VEH">Vehicle</option>
       <option value="PED">Pedestrian</option>
     </select>

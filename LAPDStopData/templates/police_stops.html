@@ -35,19 +35,26 @@
       <option selected="true" value="2015-DEC-31">December</option>
     </select>
 
-    <br>
+    <br><br>
     
     Type:
     <select name="Type">
-      <option selected="true" value="All">All</option>
+      <option value="All">All</option>
       <option value="VEH">Vehicle</option>
       <option value="PED">Pedestrian</option>
     </select>
 
-    <br>
+    <br><br>
 
     <input type="submit"></input>
+
+    <br><br>
+
+    <input name="get_previous_results" type="submit" value="Get Previous 5000: {{counter}}"></input>
+    <input name="get_next_results" type="submit" value="Get Next 5000: {{counter + 1}}"></input>
     
   </form>
 </div>
+
+<br>
 {% endblock %}

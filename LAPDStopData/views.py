@@ -7,6 +7,7 @@ from . import app, db
 
 log = app.logger
 
+counter = 0
 
 def get_area_arrests():
     """
@@ -112,16 +113,23 @@ def filter_officer():
             table_head = cur.fetchall()
             cur.execute(sql_query)
             table_data = cur.fetchall()
-            cur.execute('SELECT DIV_NAME FROM OFFICER')
+            cur.execute('SELECT DISTINCT DIV_NAME FROM OFFICER')
             regions = cur.fetchall()
     return render_template('officer.html', table_head=table_head[::-1],
                            table_data=table_data, regions=regions)
 
 @app.route('/filter_data/offender')
 def filter_offender():
+    global counter
     sql_query = 'SELECT * FROM OFFENDER'
     selected_gender = request.args.get('Gender')
     selected_ethnicity = request.args.getlist('Ethnicity')
+    if request.args.get('get_next_results'):
+        counter += 1
+    elif request.args.get('get_previous_results'):
+        counter -= 1
+    else:
+        counter = 0
     if selected_gender and selected_ethnicity:
         if (selected_gender != 'All' and selected_ethnicity[0] != 'ALL'):
             sql_query += ' WHERE '
@@ -151,17 +159,28 @@ def filter_offender():
             log.info('querying stuff')
             cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFENDER\'')
             table_head = cur.fetchall()
+            cur.execute('SELECT DISTINCT ETHNICITY FROM OFFENDER')
+            ethnicities = cur.fetchall()
             cur.execute(sql_query)
-            table_data = cur.fetchmany(numRows=2000)
-    return render_template('offenders.html', table_head=table_head[::-1],
-                           table_data=table_data)
+            for x in xrange(counter):
+                cur.fetchmany(numRows=5000)
+            table_data = cur.fetchmany(numRows=5000)
+    return render_template('offenders.html', table_head=table_head[::-1], ethnicities=ethnicities,
+                           table_data=table_data, counter=counter)
 
 @app.route('/filter_data/police_stops')
 def filter_police_stops():
+    global counter
     sql_query = 'SELECT * FROM POLICESTOP'
     begin_month = request.args.get('begin-month')
     end_month = request.args.get('end-month')
     selected_type = request.args.get('Type')
+    if request.args.get('get_next_results'):
+        counter += 1
+    elif request.args.get('get_previous_results'):
+        counter -= 1
+    else:
+        counter = 0
     if begin_month and end_month and selected_type:
         sql_query += ' WHERE '
         sql_query += 'STOP_DATE BETWEEN TO_DATE(\''
@@ -182,9 +201,11 @@ def filter_police_stops():
             cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'POLICESTOP\'')
             table_head = cur.fetchall()
             cur.execute(sql_query)
-            table_data = cur.fetchmany(numRows=2000)
+            for x in xrange(counter):
+                cur.fetchmany(numRows=5000)
+            table_data = cur.fetchmany(numRows=5000)
     return render_template('police_stops.html', table_head=table_head[::-1],
-                           table_data=table_data)
+                           table_data=table_data, counter=counter)
 
 
 @app.route('/figures')

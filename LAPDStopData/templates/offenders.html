@@ -10,22 +10,29 @@
       <option value="F">Female</option>
     </select>
 
-    <br>
+    <br><br>
 
     Ethnicity:
     <select name="Ethnicity" multiple="true">
       <option selected="true" value="ALL">All</option>
-      <option value="ASIAN">Asian</option>
-      <option value="BLACK">Black</option>
-      <option value="HISPANIC">Hispanic</option>
-      <option value="WHITE">White</option>
-      <option value="OTHER">Other</option>
+      {% for e in ethnicities %}
+      {% for data in e %}
+      <option value="{{data}}">{{data}}</option>
+      {% endfor %}
+      {% endfor %}
     </select>
     
 
-    <br>
+    <br><br>
 
     <input type="submit"></input>
+
+    <br><br>
+
+    <input name="get_previous_results" type="submit" value="Get Previous 5000: {{counter}}"></input>
+    <input name="get_next_results" type="submit" value="Get Next 5000: {{counter + 1}}"></input>
   </form>
 </div>
+
+<br>
 {% endblock %}

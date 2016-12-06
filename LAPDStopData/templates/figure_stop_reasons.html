@@ -1,0 +1,37 @@
+<canvas id="stop-reasons-chart"></canvas>
+<script>
+var bar_options = {
+    tooltips: {
+        enabled: true
+    },
+    legend: {
+        display: false,
+    },
+};
+var barData = {
+    type: 'bar',
+    data: {
+        labels : [
+            {% for type in stop_type_data.keys() %}
+                "{{type}}",
+            {% endfor %}
+        ],
+        datasets : [{
+            data : [
+                {% for count in stop_type_data.values() %}
+                    {{count}},
+                {% endfor %}
+            ],
+        }],
+    },
+    option: bar_options,
+};
+
+// get bar chart canvas
+var mychart = document.getElementById("stop-reasons-chart").getContext("2d");
+
+steps = 10
+max = 500000
+// draw bar chart
+new Chart(mychart, barData);
+</script>

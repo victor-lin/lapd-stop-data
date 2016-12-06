@@ -1,0 +1,39 @@
+<canvas id="division-counts-chart"></canvas>
+<script>
+var pie_options = {
+    tooltips: {
+        enabled: true
+    },
+    legend: {
+        display: true,
+    },
+};
+
+var division_colors = generateColors({{ num_divisions }});
+
+var div_count_data = {
+    type: 'pie',
+    data: {
+        labels: [
+            {% for division in divisions %}
+                "{{ division }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            backgroundColor: [
+                {% for i in range(num_divisions) %}
+                    division_colors[{{ i }}],
+                {% endfor %}
+            ],
+            data: [
+                {% for division in divisions %}
+                    {{ div_count_data[division] }},
+                {% endfor %}
+            ],
+        }],
+    },
+    options: pie_options,
+};
+var div_count_canvas = document.getElementById("division-counts-chart").getContext("2d");
+div_count_chart = new Chart(div_count_canvas, div_count_data);
+</script>

@@ -1,6 +1,6 @@
 from contextlib import closing
 
-from flask import render_template
+from flask import render_template, request
 from . import app, db
 
 
@@ -90,17 +90,39 @@ def test():
     return render_template('test.html', table_head=table_head[::-1], table_data=table_data)
 
 
-@app.route('/filter_data')
+@app.route('/filter_data', methods=['GET', 'POST'])
 def filter_data():
+    sql_query = 'SELECT column_name FROM all_tab_cols WHERE table_name = \'{}\''
+    table_name = 'OFFICER'
     with db.connect_db() as con:
         log.info('connected')
         with closing(con.cursor()) as cur:
             log.info('querying stuff')
-            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFICER\'')
+            cur.execute(sql_query.format(table_name))
             table_head = cur.fetchall()
             cur.execute('SELECT * FROM OFFICER')
             table_data = cur.fetchall()
-    return render_template('filter_data.html', table_head=table_head[::-1], table_data=table_data)
+            cur.execute('SELECT DIV_NAME FROM OFFICER')
+            regions = cur.fetchall()
+    return render_template('filter_data.html', table_head=table_head[::-1],
+                           table_data=table_data, regions=regions)
+
+@app.route('/filter_data/officer', methods=['GET', 'POST'])
+def filter_officer():
+    sql_query = 'SELECT column_name FROM all_tab_cols WHERE table_name = \'{}\''
+    table_name = 'OFFICER'
+    with db.connect_db() as con:
+        log.info('connected')
+        with closing(con.cursor()) as cur:
+            log.info('querying stuff')
+            cur.execute(sql_query.format(table_name))
+            table_head = cur.fetchall()
+            cur.execute('SELECT * FROM OFFICER')
+            table_data = cur.fetchall()
+            cur.execute('SELECT DIV_NAME FROM OFFICER')
+            regions = cur.fetchall()
+    return render_template('officer.html', table_head=table_head[::-1],
+                           table_data=table_data, regions=regions)
 
 
 @app.route('/figures')

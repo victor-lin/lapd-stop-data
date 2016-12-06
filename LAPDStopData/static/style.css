@@ -1,5 +1,13 @@
+html, body {
+    height: 100%;
+}
+
+nav {
+    background: #0f2940;
+}
+
 body {
-    padding: 20px 30px;
+    background: #0e1d23;
 }
 
 div.dataTables_wrapper {
@@ -8,6 +16,12 @@ div.dataTables_wrapper {
 
 .center {
     text-align: center;
+}
+
+#content {
+    padding: 20px 30px;
+    background: #F7F7F7;
+    height: 100%;
 }
 
 .topic-image {

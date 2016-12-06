@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Figures</h1>
-<div>
+<h1 class="center">Figures</h1>
+<div id="panelGroup" class="col-md-8 col-md-offset-2">
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2 data-toggle="collapse" data-target="#div-count-content">Distribution of stops amongst divisions</h2>
+      <h2 data-toggle="collapse" data-target="#div-count-content" data-parent="#panelGroup">Distribution of stops amongst divisions</h2>
     </div>
     <div id="div-count-content" class="collapse">
       <canvas id="division-counts-chart"></canvas>
@@ -50,7 +50,7 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2 data-toggle="collapse" data-target="#area-race-content">Distribution of race amongst areas</h2>
+      <h2 data-toggle="collapse" data-target="#area-race-content" data-parent="#panelGroup">Distribution of race amongst areas</h2>
     </div>
     <div id="area-race-content" class="collapse">
       <canvas id="area-race-chart"></canvas>
@@ -109,7 +109,7 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2 data-toggle="collapse" data-target="#stop-reasons-content">Reasons for police stops</h2>
+      <h2 data-toggle="collapse" data-target="#stop-reasons-content" data-parent="#panelGroup">Reasons for police stops</h2>
     </div>
     <div id="stop-reasons-content" class="collapse">
       <canvas id="stop-reasons-chart"></canvas>

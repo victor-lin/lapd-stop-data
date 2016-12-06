@@ -24,6 +24,10 @@ div.dataTables_wrapper {
     height: 100%;
 }
 
+.home-image {
+    width: 120px;
+}
+
 .topic-image {
     width: 100px;
 }

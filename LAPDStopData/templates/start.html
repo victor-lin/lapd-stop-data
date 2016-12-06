@@ -4,22 +4,32 @@
 <div style="text-align: center">
   <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#tuple-count-modal" title="Show number of tuples in each table">Show tuple counts</button>
 </div>
-<h1 class="center">Los Angeles Police Department Stop Data</h1>
-<p class="center col-md-8 col-md-offset-2">Welcome to the LAPD Traffic Stop database! This website provides an in-depth insight into traffic stops in the city of Los Angeles, California in 2015. Read more about how and why we chose this project below.</p>
-<h2 class="center">Our Method</h2>
-<p class="center col-md-8 col-md-offset-2">The Los Angeles Police Department’s traffic stop data from 2015 is an open source dataset obtained from the internet. The data, consisting over a million records, covers information about every traffic stop, including the officer and the offender*. From this data, we generated graphical representations of information that is most persistent to current day issues in society. Charts highlighting arrests by location and civilian demographic aim to provide a deeper insight into each civilian/officer interaction.</p>
-<h2 class="center">Our Goal</h2>
-<p class="center col-md-8 col-md-offset-2">The goal of our website is to provide eye-opening information regarding police/civilian interaction in one of America’s most populated cities, Los Angeles. In the past year, social tensions have risen between civilians and officers, resulting in nationwide movements, such as the Black Lives Matter and Blue Lives Matter movements. We aim to provide a factual and unbiased representation of the Los Angeles Police Department’s traffic stop data to explain the recent trend in these movements.</p>
-<div class="col-md-6 center">
-  <a href="#">
-    <h3>Overview by Ethnicity</h3>
-    <img class="topic-image" src="{{ url_for('static', filename='diverse.png') }}">
-  </a>
+<div style="padding: 0 10%">
+  <h1 class="center">Los Angeles Police Department Stop Data</h1>
+  <p class="center" style="font-size: 18px">Welcome to the LAPD Traffic Stop database! This website provides an in-depth insight into traffic stops in the city of Los Angeles, California in 2015. Read more about how and why we chose this project below.</p>
+  <div class="row center">
+    <h2>Our Method</h2>
+    <p class="col-md-10">The Los Angeles Police Department’s traffic stop data from 2015 is an open source dataset obtained from the internet. The data, consisting over a million records, covers information about every traffic stop, including the officer and the offender*. From this data, we generated graphical representations of information that is most persistent to current day issues in society. Charts highlighting arrests by location and civilian demographic aim to provide a deeper insight into each civilian/officer interaction.</p>
+    <img class="col-md-2 home-image" src="{{ url_for('static', filename='database.png') }}">
+  </div>
+  <div class="row center">
+    <h2>Our Goal</h2>
+    <img class="col-md-2 home-image" src="{{ url_for('static', filename='chart.png') }}">
+    <p class="col-md-10">The goal of our website is to provide eye-opening information regarding police/civilian interaction in one of America’s most populated cities, Los Angeles. In the past year, social tensions have risen between civilians and officers, resulting in nationwide movements, such as the Black Lives Matter and Blue Lives Matter movements. We aim to provide a factual and unbiased representation of the Los Angeles Police Department’s traffic stop data to explain the recent trend in these movements.</p>
+  </div>
 </div>
-<div class="col-md-6 center">
-  <a href="#">
-    <h3>Overview by Location</h3>
-    <img class="topic-image" src="{{ url_for('static', filename='location_pins.png') }}">
-  </a>
+<div class="row">
+  <div class="col-md-6 center">
+    <a href="/figures/ethnicity">
+      <h3>Overview by Ethnicity</h3>
+      <img class="topic-image" src="{{ url_for('static', filename='diverse.png') }}">
+    </a>
+  </div>
+  <div class="col-md-6 center">
+    <a href="/figures/location">
+      <h3>Overview by Location</h3>
+      <img class="topic-image" src="{{ url_for('static', filename='location_pins.png') }}">
+    </a>
+  </div>
 </div>
 {% endblock %}

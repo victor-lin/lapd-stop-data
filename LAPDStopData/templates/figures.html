@@ -7,45 +7,7 @@
       <h2 data-toggle="collapse" data-target="#div-count-content" data-parent="#panelGroup">Distribution of stops amongst divisions</h2>
     </div>
     <div id="div-count-content" class="collapse">
-      <canvas id="division-counts-chart"></canvas>
-      <script>
-        var pie_options = {
-            tooltips: {
-                enabled: true
-            },
-            legend: {
-                display: true,
-            },
-        };
-
-        var division_colors = generateColors({{ num_divisions }});
-
-        var div_count_data = {
-            type: 'pie',
-            data: {
-                labels: [
-                    {% for division in divisions %}
-                        "{{ division }}",
-                    {% endfor %}
-                ],
-                datasets: [{
-                    backgroundColor: [
-                        {% for i in range(num_divisions) %}
-                            division_colors[{{ i }}],
-                        {% endfor %}
-                    ],
-                    data: [
-                        {% for division in divisions %}
-                            {{ div_count_data[division] }},
-                        {% endfor %}
-                    ],
-                }],
-            },
-            options: pie_options,
-       };
-       var div_count_canvas = document.getElementById("division-counts-chart").getContext("2d");
-       div_count_chart = new Chart(div_count_canvas, div_count_data);
-      </script>
+      {% include "figure_division_counts.html" %}
     </div>
   </div>
   <div class="panel panel-default">
@@ -53,58 +15,7 @@
       <h2 data-toggle="collapse" data-target="#area-race-content" data-parent="#panelGroup">Distribution of race amongst areas</h2>
     </div>
     <div id="area-race-content" class="collapse">
-      <canvas id="area-race-chart"></canvas>
-      <script>
-        var barOptions_stacked = {
-            tooltips: {
-                enabled: true
-            },
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: false,
-                        color: "#fff",
-                        zeroLineColor: "#fff",
-                        zeroLineWidth: 0
-                    },
-                    stacked: true
-                }]
-            },
-            legend: {
-                display: true,
-            },
-        };
-        var ethnicity_colors = generateColors({{ num_ethnicities }});
-        var area_race_data = {
-            type: 'horizontalBar',
-            data: {
-                labels: [
-                    {% for division in divisions %}
-                        "{{ division }}",
-                    {% endfor %}
-                ],
-                datasets: [
-                    {% for i, ethnicity in ethnicities %}
-                        {
-                            label: "{{ ethnicity }}",
-                            data: [
-                                {% for division in divisions %}
-                                    {{ area_race_data[ethnicity][division] }},
-                                {% endfor %}
-                            ],
-                            backgroundColor: ethnicity_colors[{{ i }}],
-                        },
-                    {% endfor %}
-                ],
-            },
-            options: barOptions_stacked,
-        }
-        var area_race_canvas = document.getElementById("area-race-chart").getContext("2d");
-        div_count_chart = new Chart(area_race_canvas, area_race_data);
-      </script>
+      {% include "figure_area_race.html" %}
     </div>
   </div>
   <div class="panel panel-default">
@@ -112,43 +23,7 @@
       <h2 data-toggle="collapse" data-target="#stop-reasons-content" data-parent="#panelGroup">Reasons for police stops</h2>
     </div>
     <div id="stop-reasons-content" class="collapse">
-      <canvas id="stop-reasons-chart"></canvas>
-      <script>
-        var bar_options = {
-            tooltips: {
-                enabled: true
-            },
-            legend: {
-                display: false,
-            },
-        };
-        var barData = {
-            type: 'bar',
-            data: {
-                labels : [
-                    {% for type in stop_type_data.keys() %}
-                        "{{type}}",
-                    {% endfor %}
-                ],
-                datasets : [{
-                    data : [
-                        {% for count in stop_type_data.values() %}
-                            {{count}},
-                        {% endfor %}
-                    ],
-                }],
-            },
-            option: bar_options,
-        };
-      
-        // get bar chart canvas
-        var mychart = document.getElementById("stop-reasons-chart").getContext("2d");
-      
-        steps = 10
-        max = 500000
-        // draw bar chart
-        new Chart(mychart, barData);
-      </script>
+      {% include "figure_stop_reasons.html" %}
     </div>
   </div>
 </div>

@@ -239,3 +239,14 @@ def populate_view(table_name):
 def drop_tables_view():
     db.drop_tables()
     return ""
+
+
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.error(exception)
+    return render_template('500.html'), 500
+
+
+@app.errorhandler(404)
+def page_not_found(exception):
+    return render_template('404.html'), 404

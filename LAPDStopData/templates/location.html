@@ -1,15 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-<h1 class="center">Overview of Figures</h1>
+<h1 class="center">Overview of Location</h1>
 <div class="row">
-  <div id="panelGroup" class="col-md-8 col-md-offset-2">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <h2 data-toggle="collapse" data-target="#div-count-content" data-parent="#panelGroup">Distribution of stops amongst divisions</h2>
-      </div>
-      <div id="div-count-content" class="collapse">
-        {% include "figure_division_counts.html" %}
-      </div>
-  </div>
+  {% include "figure_division_counts.html" %}
 </div>
 {% endblock %}

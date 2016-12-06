@@ -225,26 +225,7 @@ def filter_police_stops():
                            table_data=table_data, counter=counter)
 
 
-@app.route('/figures')
-def figures():
-    # 1
-    div_count_data = get_area_arrests()
-    # 2
-    stop_type_data = get_stop_type_info()
-    # 3
-    divisions, ethnicities, area_race_data = get_area_race_data()
-    return render_template('figures.html',
-                           # 1
-                           div_count_data=div_count_data,
-                           # 2
-                           stop_type_data=stop_type_data,
-                           # 3
-                           area_race_data=area_race_data,
-                           divisions=divisions,
-                           ethnicities=enumerate(ethnicities),
-                           num_ethnicities=len(ethnicities),
-                           num_divisions=len(divisions))
-
+# FIGURES
 
 @app.route('/figures/ethnicity')
 def figures_ethnicity():
@@ -263,6 +244,23 @@ def figures_location():
     return render_template('location.html',
                            div_count_data=div_count_data,
                            divisions=divisions,
+                           num_divisions=len(divisions))
+
+
+@app.route('/figures/other')
+def figures_other():
+    # 1
+    stop_type_data = get_stop_type_info()
+    # 2
+    divisions, ethnicities, area_race_data = get_area_race_data()
+    return render_template('other.html',
+                           # 1
+                           stop_type_data=stop_type_data,
+                           # 2
+                           area_race_data=area_race_data,
+                           divisions=divisions,
+                           ethnicities=enumerate(ethnicities),
+                           num_ethnicities=len(ethnicities),
                            num_divisions=len(divisions))
 
 

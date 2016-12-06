@@ -1,10 +1,10 @@
 {% extends "filter_data.html" %}
 
 {% block filters %}
-<div>
+<div style="width:30%">
   <form action="/filter_data/officer">
-    Region:
-    <select id="region" name="Region" multiple="true">
+    <label for="region">Region:</label>
+    <select id="region" class="form-control" name="Region" multiple="true">
       <option value="All">All</option>
       {% for r in regions %}
       {% for data in r %}
@@ -15,7 +15,7 @@
 
     <br>
     
-    <input type="submit"></input>
+    <input type="submit" class="btn btn-primary"></input>
   </form>
 </div>
 {% endblock %}

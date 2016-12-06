@@ -1,10 +1,10 @@
 {% extends "filter_data.html" %}
 
 {% block filters %}
-<div>
+<div style="width:30%">
   <form action="/filter_data/police_stops">
-     From: 
-    <select name="begin-month">
+     <label for="begin">From:</label>
+    <select id="begin" class="form-control" name="begin-month">
       <option selected="true" value="2015-JAN-01">January</option>
       <option value="2015-FEB-01">February</option>
       <option value="2015-MAR-01">March</option>
@@ -19,8 +19,8 @@
       <option value="2015-DEC-01">December</option>
     </select>
 
-    To:
-    <select name="end-month">
+    <label for="end">To:</label>
+    <select id="end" class="form-control" name="end-month">
       <option value="2015-JAN-31">January</option>
       <option value="2015-FEB-28">February</option>
       <option value="2015-MAR-31">March</option>
@@ -35,23 +35,23 @@
       <option selected="true" value="2015-DEC-31">December</option>
     </select>
 
-    <br><br>
+    <br>
     
-    Type:
-    <select name="Type">
+    <label for="type">Type:</label>
+    <select id="type" class="form-control" name="Type">
       <option value="All">All</option>
       <option value="VEH">Vehicle</option>
       <option value="PED">Pedestrian</option>
     </select>
 
+    <br>
+
+    <input type="submit" class="btn btn-primary"></input>
+
     <br><br>
 
-    <input type="submit"></input>
-
-    <br><br>
-
-    <input name="get_previous_results" type="submit" value="Get Previous 5000: {{counter}}"></input>
-    <input name="get_next_results" type="submit" value="Get Next 5000: {{counter + 1}}"></input>
+    <input name="get_previous_results" type="submit" class="btn" value="Get Previous 5000: {{counter}}"></input>
+    <input name="get_next_results" type="submit" class="btn" value="Get Next 5000: {{counter + 1}}"></input>
     
   </form>
 </div>

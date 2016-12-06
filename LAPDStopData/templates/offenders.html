@@ -1,19 +1,19 @@
 {% extends "filter_data.html" %}
 
 {% block filters %}
-<div>
+<div style="width:30%">
   <form action="/filter_data/offender">
-    Gender:
-    <select name="Gender">
+    <label for="gender">Gender:</label>
+    <select id="gender" class="form-control" name="Gender">
       <option value="All">All</option>
       <option value="M">Male</option>
       <option value="F">Female</option>
     </select>
 
-    <br><br>
-
-    Ethnicity:
-    <select name="Ethnicity" multiple="true">
+    <br>
+    
+    <label for="ethnicity">Ethnicity:</label>
+    <select id="ethnicity"name="Ethnicity" class="form-control" multiple="true">
       <option selected="true" value="ALL">All</option>
       {% for e in ethnicities %}
       {% for data in e %}
@@ -22,15 +22,14 @@
       {% endfor %}
     </select>
     
+    <br>
+
+    <input type="submit" class="btn btn-primary"></input>
 
     <br><br>
 
-    <input type="submit"></input>
-
-    <br><br>
-
-    <input name="get_previous_results" type="submit" value="Get Previous 5000: {{counter}}"></input>
-    <input name="get_next_results" type="submit" value="Get Next 5000: {{counter + 1}}"></input>
+    <input name="get_previous_results" type="submit" class="btn" value="Get Previous 5000: {{counter}}"></input>
+    <input name="get_next_results" type="submit" class="btn" value="Get Next 5000: {{counter + 1}}"></input>
   </form>
 </div>
 

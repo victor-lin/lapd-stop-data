@@ -1,0 +1,38 @@
+<canvas id="ethnicity-counts-chart"></canvas>
+<script>
+var pie_options = {
+    tooltips: {
+        enabled: true
+    },
+    legend: {
+        display: true,
+    },
+};
+
+var ethnicity_colors = generateColors({{ num_ethnicities }});
+var ethnicity_count_data = {
+    type: 'pie',
+    data: {
+        labels: [
+            {% for ethnicity in ethnicities %}
+                "{{ ethnicity }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            backgroundColor: [
+                {% for i in range(num_ethnicities) %}
+                    ethnicity_colors[{{ i }}],
+                {% endfor %}
+            ],
+            data: [
+                {% for ethnicity in ethnicities %}
+                    {{ eth_count_data[ethnicity] }},
+                {% endfor %}
+            ],
+        }],
+    },
+    options: pie_options,
+};
+var ethnicity_count_canvas = document.getElementById("ethnicity-counts-chart").getContext("2d");
+ethnicity_count_chart = new Chart(ethnicity_count_canvas, ethnicity_count_data);
+</script>

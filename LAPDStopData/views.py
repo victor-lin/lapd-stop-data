@@ -9,6 +9,23 @@ log = app.logger
 
 counter = 0
 
+def get_ethnicity_distribution():
+    """
+    Return
+    ------
+    { ethnicity : stop count }
+    """
+    with db.connect_db() as con:
+        cur = con.cursor()
+        cur.execute("""  SELECT o.ethnicity,
+                                COUNT(*) AS n
+                           FROM offender o
+                       GROUP BY o.ethnicity
+                       ORDER BY n DESC""")
+        results = cur.fetchall()
+        return OrderedDict(results)
+
+
 def get_area_arrests():
     """
     Return
@@ -226,6 +243,26 @@ def figures():
                            divisions=divisions,
                            ethnicities=enumerate(ethnicities),
                            num_ethnicities=len(ethnicities),
+                           num_divisions=len(divisions))
+
+
+@app.route('/figures/ethnicity')
+def figures_ethnicity():
+    eth_count_data = get_ethnicity_distribution()
+    ethnicities = eth_count_data.keys()
+    return render_template('ethnicity.html',
+                           eth_count_data=eth_count_data,
+                           ethnicities=ethnicities,
+                           num_ethnicities=len(ethnicities))
+
+
+@app.route('/figures/location')
+def figures_location():
+    div_count_data = get_area_arrests()
+    divisions = div_count_data.keys()
+    return render_template('location.html',
+                           div_count_data=div_count_data,
+                           divisions=divisions,
                            num_divisions=len(divisions))
 
 

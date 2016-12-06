@@ -1,6 +1,15 @@
 body {
-    padding: 20px 0;
+    padding: 20px 30px;
 }
+
 div.dataTables_wrapper {
     margin-bottom: 3em;
+}
+
+.center {
+    text-align: center;
+}
+
+.topic-image {
+    width: 100px;
 }

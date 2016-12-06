@@ -1,4 +1,5 @@
 from contextlib import closing
+from collections import OrderedDict
 
 from flask import render_template, request
 from . import app, db
@@ -74,7 +75,8 @@ def get_area_race_data():
 
 @app.route('/')
 def start():
-    return render_template('start.html')
+    tuple_counts = get_tuple_count()
+    return render_template('start.html', tuple_counts=tuple_counts)
 
 
 @app.route('/test')
@@ -203,7 +205,7 @@ def get_tuple_count():
     """
     Return
     ------
-    { table name : tuple count }
+    OD{ table name : tuple count }
     """
     with db.connect_db() as con:
         cur = con.cursor()
@@ -214,7 +216,7 @@ def get_tuple_count():
                                  table_name = 'POLICESTOP')
                        ORDER BY num_rows DESC""")
         results = cur.fetchall()
-    return dict(results)
+    return OrderedDict(results)
 
 
 @app.route('/_create_schema/', methods=['POST'])

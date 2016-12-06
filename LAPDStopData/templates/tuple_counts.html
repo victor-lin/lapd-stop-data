@@ -1,0 +1,33 @@
+<div id="tuple-count-modal" class="modal fade" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content col-md-12">
+      <div class="modal-header">
+        <h3 style="text-align: center">Tuple Counts</h3>
+      </div>
+      <div>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Table Name</th>
+            <th>Number of Tuples</th>
+          </tr>
+          </thead>
+          <tbody>
+            {% for table_name, count in tuple_counts.items() %}
+              <tr>
+                <td>{{ table_name }}</td>
+                <td class="tuple-count">{{ count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('.tuple-count').each(function() {
+   var val = parseInt($(this).text());
+   $(this).text(val.toLocaleString());
+});
+</script>

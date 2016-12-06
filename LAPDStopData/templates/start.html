@@ -1,4 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
 <h1>LAPD Stop Data</h1>
+{% include "tuple_counts.html" %}
+<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#tuple-count-modal" title="Show number of tuples in each table">Show tuple counts</button>
 {% endblock %}

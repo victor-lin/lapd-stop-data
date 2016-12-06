@@ -105,32 +105,23 @@ def filter_data():
 
 @app.route('/figures')
 def figures():
+    # 1
     div_count_data = get_area_arrests()
+    # 2
+    stop_type_data = get_stop_type_info()
+    # 3
     divisions, ethnicities, area_race_data = get_area_race_data()
     return render_template('figures.html',
                            # 1
                            div_count_data=div_count_data,
                            # 2
+                           stop_type_data=stop_type_data,
+                           # 3
                            area_race_data=area_race_data,
                            divisions=divisions,
                            ethnicities=enumerate(ethnicities),
                            num_ethnicities=len(ethnicities),
                            num_divisions=len(divisions))
-
-@app.route('/stop_type_bar_chart')
-def stop_type_bar_chart():
-    stop_type_data = get_stop_type_info()
-    return render_template('stoptype.html',stop_type_data= stop_type_data)
-
-
-@app.route('/area_race')
-def area_race():
-    divisions, ethnicities, area_race_data = get_area_race_data()
-    return render_template('area_race.html',
-                           area_race_data=area_race_data,
-                           divisions=divisions,
-                           ethnicities=enumerate(ethnicities),
-                           num_ethnicities=len(ethnicities))
 
 
 @app.route('/results')

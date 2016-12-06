@@ -4,7 +4,7 @@
 <div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2  data-toggle="collapse" data-target="#div-count-content">Distribution of stops amongst divisions</h2>
+      <h2 data-toggle="collapse" data-target="#div-count-content">Distribution of stops amongst divisions</h2>
     </div>
     <div id="div-count-content" class="collapse">
       <canvas id="division-counts-chart"></canvas>
@@ -50,7 +50,7 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2  data-toggle="collapse" data-target="#area-race-content">Distribution of race amongst areas</h2>
+      <h2 data-toggle="collapse" data-target="#area-race-content">Distribution of race amongst areas</h2>
     </div>
     <div id="area-race-content" class="collapse">
       <canvas id="area-race-chart"></canvas>
@@ -104,6 +104,50 @@
         }
         var area_race_canvas = document.getElementById("area-race-chart").getContext("2d");
         div_count_chart = new Chart(area_race_canvas, area_race_data);
+      </script>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2 data-toggle="collapse" data-target="#stop-reasons-content">Reasons for police stops</h2>
+    </div>
+    <div id="stop-reasons-content" class="collapse">
+      <canvas id="stop-reasons-chart"></canvas>
+      <script>
+        var bar_options = {
+            tooltips: {
+                enabled: true
+            },
+            legend: {
+                display: false,
+            },
+        };
+        var barData = {
+            type: 'bar',
+            data: {
+                labels : [
+                    {% for type in stop_type_data.keys() %}
+                        "{{type}}",
+                    {% endfor %}
+                ],
+                datasets : [{
+                    data : [
+                        {% for count in stop_type_data.values() %}
+                            {{count}},
+                        {% endfor %}
+                    ],
+                }],
+            },
+            option: bar_options,
+        };
+      
+        // get bar chart canvas
+        var mychart = document.getElementById("stop-reasons-chart").getContext("2d");
+      
+        steps = 10
+        max = 500000
+        // draw bar chart
+        new Chart(mychart, barData);
       </script>
     </div>
   </div>

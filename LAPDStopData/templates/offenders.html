@@ -1,0 +1,31 @@
+{% extends "filter_data.html" %}
+
+{% block filters %}
+<div>
+  <form action="/filter_data/offender" method="post">
+    Gender:
+    <select name="Gender">
+      <option value="All">All</option>
+      <option value="M">Male</option>
+      <option value="F">Female</option>
+    </select>
+
+    <br>
+
+    Ethnicity:
+    <select name="Ethnicity">
+      <option value="ALL">All</option>
+      <option value="ASIAN">Asian</option>
+      <option value="BLACK">Black</option>
+      <option value="HISPANIC">Hispanic</option>
+      <option value="WHITE">White</option>
+      <option value="OTHER">Other</option>
+    </select>
+    
+
+    <br>
+
+    <input type="submit"></input>
+  </form>
+</div>
+{% endblock %}

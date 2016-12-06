@@ -89,40 +89,87 @@ def test():
             table_data = cur.fetchall()
     return render_template('test.html', table_head=table_head[::-1], table_data=table_data)
 
-
-@app.route('/filter_data', methods=['GET', 'POST'])
-def filter_data():
-    sql_query = 'SELECT column_name FROM all_tab_cols WHERE table_name = \'{}\''
-    table_name = 'OFFICER'
-    with db.connect_db() as con:
-        log.info('connected')
-        with closing(con.cursor()) as cur:
-            log.info('querying stuff')
-            cur.execute(sql_query.format(table_name))
-            table_head = cur.fetchall()
-            cur.execute('SELECT * FROM OFFICER')
-            table_data = cur.fetchall()
-            cur.execute('SELECT DIV_NAME FROM OFFICER')
-            regions = cur.fetchall()
-    return render_template('filter_data.html', table_head=table_head[::-1],
-                           table_data=table_data, regions=regions)
-
 @app.route('/filter_data/officer', methods=['GET', 'POST'])
 def filter_officer():
-    sql_query = 'SELECT column_name FROM all_tab_cols WHERE table_name = \'{}\''
-    table_name = 'OFFICER'
+    sql_query = 'SELECT * FROM OFFICER'
+    constraints = ''
+    if request.method == 'POST':
+        sql_query += ' WHERE '
+        sql_query += 'DIV_NAME = \''
+        sql_query += request.form.get('Region', '')
+        sql_query += '\' '
     with db.connect_db() as con:
         log.info('connected')
         with closing(con.cursor()) as cur:
             log.info('querying stuff')
-            cur.execute(sql_query.format(table_name))
+            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFICER\'')
             table_head = cur.fetchall()
-            cur.execute('SELECT * FROM OFFICER')
+            cur.execute(sql_query)
             table_data = cur.fetchall()
             cur.execute('SELECT DIV_NAME FROM OFFICER')
             regions = cur.fetchall()
     return render_template('officer.html', table_head=table_head[::-1],
                            table_data=table_data, regions=regions)
+
+@app.route('/filter_data/offender', methods=['GET', 'POST'])
+def filter_offender():
+    sql_query = 'SELECT * FROM OFFENDER'
+    if request.method == 'POST':
+        if (request.form.get('Gender') != 'All' and request.form.get('Ethnicity') != 'ALL'):
+            sql_query += ' WHERE '
+            sql_query += 'GENDER = \''
+            sql_query += request.form.get('Gender', '')
+            sql_query += '\' AND '
+            sql_query += 'ETHNICITY = \''
+            sql_query += request.form.get('Ethnicity', '')
+            sql_query += '\' '
+        elif (request.form.get('Gender') != 'All' and request.form.get('Ethnicity') == 'ALL'):
+            sql_query += ' WHERE '
+            sql_query += 'GENDER = \''
+            sql_query += request.form.get('Gender', '')
+            sql_query += '\' '
+        elif (request.form.get('Gender') == 'All' and request.form.get('Ethnicity') != 'ALL'):
+            sql_query += ' WHERE '
+            sql_query += 'ETHNICITY = \''
+            sql_query += request.form.get('Ethnicity', '')
+            sql_query += '\' '
+            
+    with db.connect_db() as con:
+        log.info('connected')
+        with closing(con.cursor()) as cur:
+            log.info('querying stuff')
+            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'OFFENDER\'')
+            table_head = cur.fetchall()
+            cur.execute(sql_query)
+            table_data = cur.fetchmany(numRows=2000)
+    return render_template('offenders.html', table_head=table_head[::-1],
+                           table_data=table_data)
+
+@app.route('/filter_data/police_stops', methods=['GET', 'POST'])
+def filter_police_stops():
+    sql_query = 'SELECT * FROM POLICESTOP'
+    if request.method == 'POST':
+        sql_query += ' WHERE '
+        sql_query += 'STOP_DATE BETWEEN TO_DATE(\''
+        sql_query += request.form.get('begin-month')
+        sql_query += '\', \'YYYY-MON-DD\') AND TO_DATE(\''
+        sql_query += request.form.get('end-month')
+        sql_query += '\', \'YYYY-MON-DD\') + 1 - (1/(24*60*60))'
+        if(request.form.get('Type') != 'All'):
+            sql_query += 'AND STOP_TYPE = \''
+            sql_query += request.form.get('Type', '')
+            sql_query += '\''
+        
+    with db.connect_db() as con:
+        log.info('connected')
+        with closing(con.cursor()) as cur:
+            log.info('querying stuff')
+            cur.execute('SELECT column_name FROM all_tab_cols WHERE table_name = \'POLICESTOP\'')
+            table_head = cur.fetchall()
+            cur.execute(sql_query)
+            table_data = cur.fetchmany(numRows=2000)
+    return render_template('police_stops.html', table_head=table_head[::-1],
+                           table_data=table_data)
 
 
 @app.route('/figures')

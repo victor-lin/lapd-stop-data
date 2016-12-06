@@ -16,83 +16,8 @@
 {% block body %}
 <h1>Filter Data</h1>
 <div>
-  <form action="/filter_data" method="post">
-    Beginning Month:
-    <select name="begin-month">
-      <option value="January">January</option>
-      <option value="February">February</option>
-      <option value="March">March</option>
-      <option value="April">April</option>
-      <option value="May">May</option>
-      <option value="June">June</option>
-      <option value="July">July</option>
-      <option value="August">August</option>
-      <option value="September">September</option>
-      <option value="October">October</option>
-      <option value="November">November</option>
-      <option value="December">December</option>
-    </select>
-
-    to
-
-    End Month:
-    <select name="end-month">
-      <option value="January">January</option>
-      <option value="February">February</option>
-      <option value="March">March</option>
-      <option value="April">April</option>
-      <option value="May">May</option>
-      <option value="June">June</option>
-      <option value="July">July</option>
-      <option value="August">August</option>
-      <option value="September">September</option>
-      <option value="October">October</option>
-      <option value="November">November</option>
-      <option selected="true" value="December">December</option>
-    </select>
-    
-    <br>
-    
-    Gender:
-    <select name="Gender">
-      <option value="All">All</option>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-    </select>
-
-    <br>
-
-    Ethnicity:
-    <input type="checkbox" value="Asian">Asian</input>
-    <input type="checkbox" value="Black">Black</input>
-    <input type="checkbox" value="Hispanic">Hispanic</input>
-    <input type="checkbox" value="White">White</input>
-    <input type="checkbox" value="Other">Other</input>
-
-    <br>
-
-    Type:
-    <select name="Type">
-      <option value="All">All</option>
-      <option value="Vehicle">Vehicle</option>
-      <option value="Pedestrian">Pedestrian</option>
-    </select>
-
-    <br>
-
-    Region:
-    <select name="Region" multiple="true">
-      {% for r in regions %}
-      {% for data in r %}
-      <option value="{{data}}">{{data}}</option>
-      {% endfor %}
-      {% endfor %}
-    </select>
-
-    <br>
-    
-    <input type="submit"></input>
-  </form>
+    {% block filters %}
+    {% endblock %}
 </div>
 
 <br>

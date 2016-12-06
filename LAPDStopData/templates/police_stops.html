@@ -1,0 +1,53 @@
+{% extends "filter_data.html" %}
+
+{% block filters %}
+<div>
+  <form action="/filter_data/police_stops" method="post">
+     From: 
+    <select name="begin-month">
+      <option selected="true" value="2015-JAN-01">January</option>
+      <option value="2015-FEB-01">February</option>
+      <option value="2015-MAR-01">March</option>
+      <option value="2015-APR-01">April</option>
+      <option value="2015-MAY-01">May</option>
+      <option value="2015-JUN-01">June</option>
+      <option value="2015-JUL-01">July</option>
+      <option value="2015-AUG-01">August</option>
+      <option value="2015-SEP-01">September</option>
+      <option value="2015-OCT-01">October</option>
+      <option value="2015-NOV-01">November</option>
+      <option value="2015-DEC-01">December</option>
+    </select>
+
+    To:
+    <select name="end-month">
+      <option value="2015-JAN-31">January</option>
+      <option value="2015-FEB-28">February</option>
+      <option value="2015-MAR-31">March</option>
+      <option value="2015-APR-30">April</option>
+      <option value="2015-MAY-31">May</option>
+      <option value="2015-JUN-30">June</option>
+      <option value="2015-JUL-31">July</option>
+      <option value="2015-AUG-31">August</option>
+      <option value="2015-SEP-30">September</option>
+      <option value="2015-OCT-31">October</option>
+      <option value="2015-NOV-30">November</option>
+      <option selected="true" value="2015-DEC-31">December</option>
+    </select>
+
+    <br>
+    
+    Type:
+    <select name="Type">
+      <option value="All">All</option>
+      <option value="VEH">Vehicle</option>
+      <option value="PED">Pedestrian</option>
+    </select>
+
+    <br>
+
+    <input type="submit"></input>
+    
+  </form>
+</div>
+{% endblock %}
